@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+<!--<img src="/static/logo.png" width="200" style="padding: 20px;">-->
+<div>
+<label>Gustoso Cafe~ </label>
+<input type="submit" value="Account Center" id="opt-account">
+<input type="submit" value="Payment Settings" id="opt-payment">
+<input type="submit" value="Order & Payments" id="opt-orders">
+<input type="submit" value="Help & Complain " id="opt-help">
+<a href="/logout">Logout</a>
+</div>
+
+<div id="editingprofile" style="display: none;">
+    <form>
+        <div>
+        <input type="text" name="upcus_id" id="upcus_id" value="{{cus_id}}" style="display:none">
+        </div><br>
+        <div>
+        <input type="email" name="email" id="email" value="{{email}}" >
+        </div><br>
+
+        <div>
+        <input type="text" name="password" id="password" value="{{password}}">
+        </div><br>
+
+        <div>
+        <input type="text" name="name" id="name" value="{{name}}">
+        </div><br>
+
+        <div>
+        <input type="text" name="phone" id="phone" value="{{phone}}">
+        </div><br>
+
+        <div>
+        <input type="text" name="address" id="address" value="{{address}}">
+        </div><br>
+
+        <div>
+            <input type="file" name="image" id="image"  onchange="displayImage(this)">
+        </div><br>
+
+        <div id="selected-image-container">
+            <img id="selected-image" src="#" alt="Selected Image" style="max-width: 170px; display: none;">
+        </div><br>
+
+        <div>
+        <input type="submit" name="updatebtn" id="updatebtn" value="Save Changes" >
+            <input type="submit" name="discardbtn" id="discardbtn" value=" Discard Changes" >
+        </div>
+    </form>
+
+    <div id="deleteprofile">
+        <p> If you want to delete your Account you can do it buy pressing "Delete Profile" Button</p>
+        <div id="delete-form">
+        <form>
+            <div>
+        <input type="text" name="del-cus_id" id="del-cus_id" value="{{cus_id}}" style="display:none">
+        </div><br>
+        <div>
+        <input type="submit" name="del-btn" id="del-btn" value="Delete Profile" >
+        </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+<div id="paymentsettings" style="display: none;">
+    <div id="pay-choice">
+        <input type="submit" value="Master/Visa Card" id="opt-card">
+        <input type="submit" value="Jazzcash/Easypaisa" id="opt-epay">
+    </div>
+
+<div id="epay-info" style="display: none;">
+    <form>
+        <div>
+        <input type="text" name="cus_id" id="ecus_id" value="{{cus_id}}">
+        </div><br>
+
+        <div>
+        <input type="text" name="epay-name" id="epay-name" placeholder=" Account Owner ">
+        </div><br>
+
+
+        <div>
+        <input type="text" name="epay-method" id="epay-method" placeholder="Jazzcash/Easypaisa/..">
+        </div><br>
+
+        <div>
+        <input type="text" name="epay-num" id="epay-num" placeholder=" Number ">
+        </div><br>
+
+        <div>
+        <input type="submit" name="epay_btn" id="epay_btn" value="Save Transaction Info" >
+        </div>
+    </form>
+</div>
+
+<div id="card-info" style="display: none;">
+    <form>
+        <div>
+        <input type="text" name="cus_id" id="cus_id" value="{{cus_id}}">
+        </div><br>
+
+        <div>
+        <input type="text" name="card_no" id="card_no" placeholder="Card Number">
+        </div><br>
+
+        <div>
+        <input type="text" name="card_exp" id="card_exp" placeholder="Card Expiry">
+        </div><br>
+
+        <div>
+        <input type="text" name="card_cvv" id="card_cvv" placeholder="CVV">
+        </div><br>
+
+        <div>
+        <input type="submit" name="pay_btn" id="pay_btn" value="Save Transaction Info" >
+        </div>
+    </form>
+</div>
+</div>
+<div id="orderdetails" style="display: none;">
+    <h1>Your Order History</h1>
+   <table border="1px">
+    <thead>
+        <th>Name</th>
+        <th>Order</th>
+        <th>Time</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Payment Method</th>
+        <th>Delivery Type</th>
+    </thead>
+</table>
+
+</div>
+
+<div id="complain_help" style="display:none; ">
+    <div id="complain">
+        <h2> Submit your complain here </h2>
+        <h4> We will reply you asap </h4>
+        <textarea name="paragraph_text" cols="70" rows="9">My complain is about....</textarea>
+        <div>
+        <input type="submit" name="comp_btn" id="comp_btn" value=" Submit Complain" >
+        </div>
+    </div>
+
+    <div id="help">
+        <h2> How can we help you sir ?</h2>
+        <option>1. Feedback on Food</option>
+        <option>2. Service Experience</option>
+        <option>3. Ambiance and Atmosphere</option>
+        <option>4. Menu and Options</option>
+        <option>5. Special Occasions</option>
+        <option>6. Wait Time</option>
+        <option>7. Suggestions for Improvement</option>
+        <option>8. Overall Experience</option>
+    </div>
+</div>
+<script>
+    function displayImage(input) {
+            var selectedImage = document.getElementById('selected-image');
+            var selectedImageContainer = document.getElementById('selected-image-container');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImage.setAttribute('src', e.target.result);
+                    selectedImage.style.display = 'block';
+                    selectedImageContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    const update_form = document.getElementById('editingprofile');
+    const pay_form = document.getElementById('paymentsettings');
+    const order_table = document.getElementById('orderdetails');
+    const help_form = document.getElementById('complain_help');
+    const card_form = document.getElementById('card-info');
+    const epay_form = document.getElementById('epay-info');
+
+    const update_btn = document.getElementById('opt-account');
+    const pay_btn = document.getElementById('opt-payment');
+    const order_btn = document.getElementById('opt-orders');
+    const help_btn = document.getElementById('opt-help');
+    const card_btn = document.getElementById('opt-card');
+    const epay_btn = document.getElementById('opt-epay');
+
+
+    help_btn.addEventListener('click', ()=> {
+    if (help_form.style.display === 'none'){
+        help_form.style.display = 'block';
+        pay_form.style.display = 'none';
+        order_table.style.display = 'none';
+        update_form.style.display = 'none';
+        card_form.style.display = 'none';
+        epay_form.style.display = 'none';
+    } else {
+        help_form.style.display = 'none'
+    }
+    });
+
+    update_btn.addEventListener('click', ()=> {
+    if (update_form.style.display === 'none'){
+        update_form.style.display = 'block';
+        pay_form.style.display = 'none';
+        order_table.style.display = 'none';
+        help_form.style.display = 'none';
+        card_form.style.display = 'none';
+        epay_form.style.display = 'none';
+    } else {
+        update_form.style.display = 'none'
+    }
+    });
+
+        order_btn.addEventListener('click', ()=> {
+            if (order_table.style.display === 'none'){
+                order_table.style.display = 'block';
+                pay_form.style.display = 'none';
+                update_form.style.display = 'none';
+                help_form.style.display = 'none';
+                card_form.style.display = 'none';
+                epay_form.style.display = 'none';
+            } else {
+                order_table.style.display = 'none'
+                    }
+        });
+
+    pay_btn.addEventListener('click', ()=> {
+        if (pay_form.style.display === 'none'){
+            pay_form.style.display = 'block';
+            update_form.style.display = 'none';
+            order_table.style.display = 'none';
+            help_form.style.display = 'none';
+        } else {
+            pay_form.style.display = 'none';
+        }
+    });
+
+    card_btn.addEventListener('click', ()=> {
+            if (card_form.style.display === 'none'){
+                order_table.style.display = 'none';
+                pay_form.style.display = 'block';
+                update_form.style.display = 'none';
+                help_form.style.display = 'none';
+                card_form.style.display = 'block';
+                epay_form.style.display = 'none';
+            } else {
+                card_form.style.display = 'none'
+                    }
+        });
+
+    epay_btn.addEventListener('click', ()=> {
+            if (epay_form.style.display === 'none'){
+                order_table.style.display = 'none';
+                pay_form.style.display = 'block';
+                update_form.style.display = 'none';
+                help_form.style.display = 'none';
+                card_form.style.display = 'none';
+                epay_form.style.display = 'block';
+            } else {
+                epay_form.style.display = 'none'
+                    }
+        });
+
+$(document).on("click","#updatebtn", function(e){
+        e.preventDefault();
+            var id = $('#upcus_id').val();
+            var em = $('#email').val();
+            var pwd = $('#password').val();
+            var nm = $('#name').val();
+            var ph = $('#phone').val();
+            var add = $('#address').val();
+            var img = $('#image')[0].files[0];
+
+            console.log(id,em,pwd,nm,ph,add,img)
+<!--            var formdata = {email: em, password:pwd, name:nm, phone:ph, address:add, image:img }-->
+
+            var formdata = new FormData();
+            formdata.append("email", em);
+            formdata.append("password", pwd);
+            formdata.append("name", nm);
+            formdata.append("phone", ph);
+            formdata.append("address", add);
+            formdata.append("image", img);
+
+        $.ajax({
+            type:"PUT",
+            url:"/updateProfile/" + id,
+            data: formdata,
+            contentType: false,
+            processData: false,
+            success: function(res){
+                 alert("Profile Updated");
+            }, //3
+              error: function(err) {
+                alert("Invalid entry, Try again!");
+            }
+       }); //2
+    }); //1
+
+
+ $(document).on("click","#del-btn",function(e){
+    e.preventDefault();
+        var id = $("#del-cus_id").val();
+
+        $.ajax({
+            type: "DELETE",
+            url: "/deleteCustomer/"+id,
+            success: function(){
+                window.location.href = '/logout';
+                alert("Profile Delted");
+            },
+        });
+
+
+
+ });
+</script>
+</body>
+</html>

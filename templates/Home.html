@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Gustoso Cafe ~</title>
+</head>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/back1.jpg'); /* Replace with your background image URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Make sure the container takes the full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #F7E7CE;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
+            margin: 20px;
+            padding: 20px;
+            width: 900px
+        }
+
+        .left {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .left img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .right {
+            flex: 1;
+            text-align: center;
+        }
+
+        #register_form_btn, #login_form_btn {
+            display: block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #A67B5B;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #register_form_btn:hover, #login_form_btn:hover {
+            background-color: #C19A6B;
+        }
+       #login-form, #register-form {
+            display: none;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Box shadow for the glass effect */
+        }
+
+        /* Style for the input fields */
+        input[type="email"],
+        input[type="password"],
+        input[type="text"],
+        input[type="file"],
+        input[type="submit"] {
+            display: block;
+            width: 70%;
+            padding: 10px;
+            margin: 10px auto;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent white input fields */
+        }
+
+        input[type="submit"] {
+            background: #A67B5B; /* Button background color */
+            color: #fff; /* Button text color */
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background: #C19A6B; /* Button background color on hover */
+        }
+    </style>
+<body>
+ <div class="container">
+        <div class="left">
+            <img src="/static/logo.png" alt="Logo" width="500px">
+            <div>
+                <input type="submit" value="Register" id="register_form_btn">
+                <input type="submit" value="Login" id="login_form_btn">
+            </div>
+        </div>
+     <div class="right">
+         <div id="login-form">
+                <form>
+                    <div>
+                        <input type="email" name="l-email" id="l-email" placeholder="Email">
+                    </div>
+
+                    <div>
+                        <input type="password" name="l-password" id="l-password" placeholder="Password">
+                    </div>
+
+                    <div>
+                        <input type="submit" name="loginbtn" id="loginbtn" value="Login">
+                    </div>
+                </form>
+            </div>
+         </div>
+
+
+<div id="register-form" style="display:none; text-align: center;">
+    <form>
+        <div>
+        <input type="email" name="email" id="email" placeholder="Email">
+        </div><br>
+
+        <div>
+        <input type="password" name="password" id="password" placeholder="Password">
+        </div><br>
+
+        <div>
+        <input type="text" name="name" id="name" placeholder="Name">
+        </div><br>
+
+        <div>
+        <input type="text" name="phone" id="phone" placeholder="Phone Number">
+        </div><br>
+
+        <div>
+        <input type="text" name="address" id="address" placeholder="Address">
+        </div><br>
+
+        <div>
+            <input type="file" name="image" id="image" onchange="displayImage(this)">
+        </div><br>
+
+        <div id="selected-image-container">
+            <img id="selected-image" src="#" alt="Selected Image" style="max-width: 170px; display: none;">
+        </div><br>
+
+        <div>
+        <input type="submit" name="registerbtn" id="registerbtn" value="Register" >
+        </div>
+    </form>
+
+ </div>
+<script>
+
+   $(document).on("click","#registerbtn", function(e){
+        e.preventDefault();
+            var em = $('#email').val();
+            var pwd = $('#password').val();
+            var nm = $('#name').val();
+            var ph = $('#phone').val();
+            var add = $('#address').val();
+            var image = $('#image')[0].files[0];
+
+            var formdata = new FormData();
+            formdata.append("email", em);
+            formdata.append("password", pwd);
+            formdata.append("name", nm);
+            formdata.append("phone", ph);
+            formdata.append("address", add);
+            formdata.append("image", image);
+
+        $.ajax({
+            type:"POST",
+            url:"/registerCustomer",
+            data: formdata,
+            contentType: false,
+            processData: false,
+            success: function(res){
+                 console.log(res)
+                 window.location.href = '/redirect';
+            } //3
+        }); //2
+    }); //1
+
+      const form = document.getElementById('register-form');
+        const button = document.getElementById('register_form_btn');
+
+        button.addEventListener('click', ()=> {
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                 login_form.style.display = 'none';
+            } else {
+                form.style.display = 'none';
+            }
+        });
+
+      const login_form = document.getElementById('login-form');
+        const login_button = document.getElementById('login_form_btn');
+
+        login_button.addEventListener('click', () => {
+            if (login_form.style.display === 'none') {
+                login_form.style.display = 'block';
+                form.style.display = 'none';
+            } else {
+                login_form.style.display = 'none';
+            }
+        });
+
+
+
+       $(document).on("click","#loginbtn", function(e){
+        e.preventDefault();
+            var em = $('#l-email').val();
+            var pwd = $('#l-password').val();
+            var formdata = {"email":em, "password":pwd};
+
+        $.ajax({
+            type:"POST",
+            url:"/LoginCustomer",
+            data: JSON.stringify(formdata),
+            contentType: 'application/json',
+            success: function(res){
+                 window.location.href = '/redirect';
+            }, //3
+              error: function(err) {
+                alert("Invalid entry, Try again!");
+            }
+        }); //2
+    }); //1
+
+ function displayImage(input) {
+            var selectedImage = document.getElementById('selected-image');
+            var selectedImageContainer = document.getElementById('selected-image-container');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImage.setAttribute('src', e.target.result);
+                    selectedImage.style.display = 'block';
+                    selectedImageContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+</script>
+</body>
+</html>
